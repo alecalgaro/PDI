@@ -19,18 +19,18 @@ plt.imshow(img, cmap='gray')
 plt.title('Imagen en escala de grises')
 
 # Graficar el perfil de intensidad de una fila
-fila = img[100, :]  # perfil de intensidad de la fila 100
+fila = img[200, :]  # perfil de intensidad de la fila indicada
 plt.figure()
 plt.plot(fila)
-plt.title('Perfil de intensidad de la fila 100')
+plt.title('Perfil de intensidad de la fila 200')
 plt.xlabel('Columna')
 plt.ylabel('Intensidad')
 
 # Graficar el perfil de intensidad de una columna
-columna = img[:, 100]   # perfil de intensidad de la columna 100
+columna = img[:, 200]   # perfil de intensidad de la columna indicada
 plt.figure()
 plt.plot(columna)
-plt.title('Perfil de intensidad de la columna 100')
+plt.title('Perfil de intensidad de la columna 200')
 plt.xlabel('Fila')
 plt.ylabel('Intensidad')
 
