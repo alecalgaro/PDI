@@ -5,6 +5,9 @@ sobre dos imagenes que sean pasadas como parametros:
 -Diferencia. 
 Aplique las dos funciones de reescalado usadas tipicamente para evitar el desborde 
 de rango (sumar 255 y dividir por 2, o restar el minimo y escalar a 255).
+
+En el archivo Ej3_dif_v2 deje otra version usando la funcion cv2.subtract (explique la diferencia),
+y en el cual se usa un listado de imagenes o frames de un video.
 """
 
 import os

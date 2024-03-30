@@ -22,6 +22,13 @@ no eran blancos en la mascara (eran negros en la mascara o imagen binaria). Eso 
 "blanquear" las areas de F que son consideradas "primer plano" por la mascara.
 
 Si no se usan las lineas de threshold y F[mask != 255] sirve igual, pero eso da un mejor resultado.
+
+cv2.subtract realiza la misma operacion de resta que el operador "-", pero "satura" el resultado en
+lugar de permitir que haya desbordamiento (que se pase de 255 y vuelva a comenzar en 0 y al revés).
+Eso significa que si el resultado de la resta es menor a 0, cv2.subtract coloca 0, y si el resultado
+es mayor a un valor máximo (255), cv2.subtract coloca ese valor máximo. 
+Entonces la diferencia entre cv2.subtract y el operador "-" es que "-" permite el desbordamiento  
+(hay que evitarlo desde el codigo) y cv2.subtract satura los resultados para evitarlo.
 """
 
 def apply_Dif():
