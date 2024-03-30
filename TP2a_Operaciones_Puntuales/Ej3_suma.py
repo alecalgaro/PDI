@@ -52,26 +52,30 @@ def alpha_blending(img1, img2, alpha):
 
     return blend_img
 
-#* La fusion de imagenes es simplemente un promedio de las imagenes (sin alpha), se suman todas y
-#* se divide por la cantidad de imagenes. La hice porque se muestra en la teoria debajo de la suma
+#* La fusion o promedio de imagenes es simplemente un promedio de las imagenes (sin alpha), se suman 
+#* todas y se divide por la cantidad de imagenes. La hice porque se muestra en la teoria debajo de la suma
 
-def fusion(img1, img2):
-    # Asegurarse de que las imágenes tienen el mismo tamaño
-    assert img1.shape == img2.shape, "Las imágenes deben tener el mismo tamaño"
+def promedio(images):
+    # Asegurarse de que todas las imágenes tienen el mismo tamaño
+    for img in images[1:]:
+        assert img.shape == images[0].shape, "Todas las imágenes deben tener el mismo tamaño"
 
-    # Convertir las imágenes a float32 para evitar desbordamiento, ya que si un px en  
-    # unit8 supera 255, se vuelve a 0 y se pierde información. No es lo mismo que np.clip
-    img1 = img1.astype(np.float32)
-    img2 = img2.astype(np.float32)
+    # Convertir las imágenes a float32 para evitar desbordamiento
+    images = [img.astype(np.float32) for img in images]
 
-    # Sumar las imágenes
-    result = (img1 + img2)/2
-    result = np.clip(result, 0, 255)  # Limitar los valores al rango de 0 a 255
+    # Sumar todas las imágenes
+    suma = np.sum(images, axis=0)
+
+    # Calcular el promedio
+    prom = suma / len(images)
+
+    # Limitar los valores al rango de 0 a 255
+    prom = np.clip(prom, 0, 255)
 
     # Convertir la imagen de vuelta a uint8 para poder mostrarla
-    result = result.astype(np.uint8)
+    prom = prom.astype(np.uint8)
 
-    return result
+    return prom
 
 #* Carga de imagenes y uso de las funciones
 
@@ -103,12 +107,12 @@ while True:
     # Aplicar las funciones
     result_sum = suma(img1, img2, alpha[0])
     result_blend = alpha_blending(img1, img2, alpha[0])
-    result_fusion = fusion(img1, img2)
+    result_prom = promedio([img1, img2])
 
     # Mostrar las imagenes
     cv2.imshow("Suma", result_sum)
     cv2.imshow("Mezcla", result_blend)
-    cv2.imshow("Fusion", result_fusion)
+    cv2.imshow("Fusion o promedio", result_prom)
 
     # Actualizar la ventana de cvui
     cvui.imshow(WINDOW_NAME, frame)
