@@ -69,47 +69,51 @@ def nothing(x):
 cv2.namedWindow('Controles')
 
 # Crea una imagen para la interfaz de usuario
-ui = np.zeros((100, 500), np.uint8)
+ui = np.zeros((250, 500), np.uint8)
 
 # Inicializa cvui 
 cvui.init('Controles')
 
-# Crea los trackbars para clipLimit y tileGridSize
-cv2.createTrackbar('clipLimit', 'Controles', 10, 100, nothing)
-cv2.createTrackbar('tileGridSize', 'Controles', 60, 100, nothing)
+# Valores iniciales para los trackbars
+clipLimit = [10]
+tileGridSize = [60]
 
 # Bucle infinito para que se actualice en tiempo real la imagen con los valores de los trackbars
 while(1):   
-    # Obtengo los valores actuales de los trackbars con getTrackbarPos
-    clipLimit = cv2.getTrackbarPos('clipLimit', 'Controles')
-    tileGridSize = cv2.getTrackbarPos('tileGridSize', 'Controles')
+    ui[:] = (50)
+    
+    # El clipLimit lo hago variar de a 0.1 y el tileGridSize de a 1 porque debe ser entero
+    cvui.text(ui, 50, 20, "ClipLimit")
+    cvui.trackbar(ui, 50, 50, 400, clipLimit, 1, 100, 0.1, '%.0Lf', cvui.TRACKBAR_DISCRETE, 0.1)
+    cvui.text(ui, 50, 100, "TileGridSize")
+    cvui.trackbar(ui, 50, 130, 400, tileGridSize, 1, 100, 1, '%.0Lf', cvui.TRACKBAR_DISCRETE, 1)
 
     # Me aseguro que tileGridSize sea al menos 1
-    if tileGridSize == 0:
-        tileGridSize = 1
+    if tileGridSize[0] == 0:
+        tileGridSize[0] = 1
 
     # Aplica CLAHE con los valores actuales de los trackbars
-    clahe = cv2.createCLAHE(clipLimit=float(clipLimit), tileGridSize=(tileGridSize,tileGridSize))
+    clahe = cv2.createCLAHE(clipLimit=float(clipLimit[0]), tileGridSize=(tileGridSize[0],tileGridSize[0]))
     cl1 = clahe.apply(img)
 
     # Muestra la imagen (se crea en una ventana distinta que la UI porque sino da problemas)
     cv2.imshow('Ecualizacion adaptativa', cl1)
 
     # Se dibuja el botón en la imagen de la interfaz de usuario
-    if cvui.button(ui, 10, 10, "Usar estos valores"):
+    if cvui.button(ui, 50, 200, "Usar estos valores"):
         # Al presionar el botón se guardan los valores de los trackbars para usarlos en el resto del codigo
-        clipLimit_global = clipLimit
-        tileGridSize_global = tileGridSize
+        clipLimit_global = clipLimit[0]
+        tileGridSize_global = tileGridSize[0]
         break
 
     # Muestra la interfaz de usuario
     cvui.imshow('Controles', ui)
 
     # Espera a que se presione la tecla ESC para salir
-    if cv2.waitKey(1) & 0xFF == 27:
+    if cv2.waitKey(20) == 27:
         # Al cerrar la ventana se guardan los valores de los trackbars para usarlos en el resto del codigo
-        clipLimit_global = clipLimit
-        tileGridSize_global = tileGridSize
+        clipLimit_global = clipLimit[0]
+        tileGridSize_global = tileGridSize[0]
         break
 
 cv2.destroyAllWindows() # Cierro todas las ventanas cuando sale del bucle
