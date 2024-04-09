@@ -12,7 +12,6 @@ pimienta), y no genera desenfoque en la imagen como los filtros lineales de suav
 import os
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
 import cv2
-import numpy as np
 import argparse
 
 PATH = "../images/"
@@ -32,7 +31,7 @@ nombre_imagen = args["image"] if args["image"] else default_img
 img = cv2.imread(PATH + nombre_imagen, cv2.IMREAD_GRAYSCALE)
 
 # Tamano de ventana
-ksize = 1   # debe ser impar y mayor a 1
+ksize = 3   # debe ser impar y mayor a 1 (ksize = 1 no tiene efecto)
 
 # Aplicar filtro de mediana (filtro no lineal)
 dst = cv2.medianBlur(img, ksize)

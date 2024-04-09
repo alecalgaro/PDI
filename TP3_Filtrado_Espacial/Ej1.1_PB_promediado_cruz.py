@@ -21,8 +21,9 @@ PATH = "../images/"
 # python Ej1.1_PB_promediado_cruz.py -im nombreImagen.jpg
 
 #* Si lo quiero ejecutar cambiando la imagen desde el codigo:
-default_img = "placa_ruido_impulsivo.jpg"
-# default_img = "hubble.tif"
+# default_img = "placa_ruido_impulsivo.jpg"
+default_img = "cameraman.tif"
+# default_img = "hubble.tif"    # para probar para el ejercicio 1.4
 
 # Se crea el analizador de parametros y se especican
 ap = argparse.ArgumentParser()
@@ -63,7 +64,7 @@ dst_cross = cv2.filter2D(img,-1,mask)
 
 # Mostrar la imagen original y la imagen obtenida con los filtros de promediado
 cv2.imshow('Original', img)
-cv2.imshow('Promediado', dst)
+cv2.imshow('Promediado con filter2D', dst)
 cv2.imshow('Promediado BoxFilter', dst_box)
 cv2.imshow('Promediado Cruz', dst_cross)
 

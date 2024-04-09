@@ -60,7 +60,7 @@ g = g + 127
 
 cv2.imshow('Original', f)
 cv2.imshow('Pasa bajos', PB)
-cv2.imshow('Pasa altos', g)
+cv2.imshow('Máscara difusa', g)
 
 cv2.waitKey(0)
 cv2.destroyAllWindows()
