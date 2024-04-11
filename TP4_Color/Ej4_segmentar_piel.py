@@ -44,7 +44,7 @@ img = cv2.imread(PATH + nombre_imagen)
 # Definir el color central "a" y el radio R0 de la esfera de color
 a = np.array([99, 122, 165])    # ajutar color de piel
 R0 = 60
-img_sliced_rgb = cs.color_slicing_rgb(img, a, R0)
+img_sliced_rgb = cs.color_slicing_rgb_sphere(img, a, R0)
 
 #* Aplicar el rebanado de color en HSV
 # Se debe encontrar un rango de H y S que contenga los colores de piel, y el V se deja de 0 a 255

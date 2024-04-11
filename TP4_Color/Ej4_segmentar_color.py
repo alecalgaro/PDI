@@ -37,7 +37,7 @@ hist_r, hist_g, hist_b, hist_h, hist_s, hist_v = hc.hist_channel(img)
 # el color que nos interesa, porque no siempre sera un color puro.
 a = np.array([46, 43, 252])  # rojo de la camiseta del arbitro
 R0 = 100
-img_sliced_rgb = cs.color_slicing_rgb(img, a, R0)
+img_sliced_rgb = cs.color_slicing_rgb_sphere(img, a, R0)
 
 #* Aplicar el rebanado de color en HSV
 # La funcion recibe una imagen y dos arrays con los valores minimos y maximos de cada canal
