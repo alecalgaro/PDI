@@ -26,7 +26,7 @@ completo en negro, o detalles asi que se pueden probar.
 """
 
 # Si lo quiero usar desde consola:
-# python Ej5_segmentacion_HSV.py -im nombreImagen.png
+# python Ej5_segmentacion_HSV_imagen.py -im nombreImagen.png
 
 PATH = '../images/'
 

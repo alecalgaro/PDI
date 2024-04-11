@@ -25,7 +25,7 @@ obtengan los colores que corresponden.
 PATH = '../images/'
 
 # Si lo quiero usar desde consola:
-# python Ej5_segmentacion_RGB.py -im nombreImagen.png
+# python Ej5_segmentacion_RGB_imagen.py -im nombreImagen.png
 
 default_img = "futbol.jpg"
 # default_img = "pattern.tif"
@@ -77,7 +77,7 @@ while True:
     upper = np.array([b_max[0], g_max[0], r_max[0]])
 
     # Aplicar el rebanado de color
-    img_slicing = cs.color_slicing_rgb_range(img, lower, upper)
+    img_slicing = cs.color_slicing_rgb(img, lower, upper)
 
     # Mostrar la imagen filtrada y los controles
     cvui.imshow(WINDOW_NAME_CONTROLS, UI)
