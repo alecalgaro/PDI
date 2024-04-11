@@ -42,14 +42,14 @@ def color_slicing_rgb_range(img, lower, upper):
     Recibe la imagen y dos arrays con los valores minimo y maximo de cada canal.
     Devuelve una imagen en el mismo espacio de color que la imagen de entrada.
     """
-    # Convertir lower y upper a arrays de numpy del mismo tipo de datos
-    lower = np.array(lower, dtype="uint8")
-    upper = np.array(upper, dtype="uint8")
+    # Convertir lower y upper a arrays de numpy del mismo tipo de datos que la imagen de entrada
+    lower = np.array(lower, dtype=img.dtype)
+    upper = np.array(upper, dtype=img.dtype)
     
-    # Crear una máscara para los píxeles que están dentro del rango de color
+    # Crear una mascara para los pixeles que están dentro del rango de color
     mask = cv2.inRange(img, lower, upper)
 
-    # Aplicar la máscara a la imagen
+    # Aplicar la mascara a la imagen
     img_sliced = cv2.bitwise_and(img, img, mask=mask)
 
     return img_sliced
@@ -62,10 +62,14 @@ def color_slicing_hsv(img, lower, upper):
     # Convertir la imagen a HSV
     img_hsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
 
-    # Crear una máscara para los píxeles que están dentro del rango de color
+    # Convertir lower y upper a arrays de numpy del mismo tipo de datos que la imagen
+    lower = np.array(lower, dtype=img_hsv.dtype)
+    upper = np.array(upper, dtype=img_hsv.dtype)
+
+    # Crear una mascara para los pixeles que estan dentro del rango de color
     mask = cv2.inRange(img_hsv, lower, upper)
 
-    # Aplicar la máscara a la imagen
+    # Aplicar la mascara a la imagen
     img_sliced = cv2.bitwise_and(img, img, mask=mask)
 
     return img_sliced
