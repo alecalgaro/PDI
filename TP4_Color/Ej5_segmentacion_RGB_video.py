@@ -41,6 +41,9 @@ r_max = [255]
 g_max = [255]
 b_max = [255]
 
+# Valor del checkbox para mostrar la mascara o la segmentacion
+show_mask = [False]
+
 while True:
     UI[:] = (49, 52, 49)
 
@@ -58,6 +61,9 @@ while True:
     cvui.text(UI, 10, 470, 'B max')
     cvui.trackbar(UI, 10, 490, 300, b_max, 0, 255)
 
+    # Crear el checkbox para mostrar la mascara o la segmentacion
+    cvui.checkbox(UI, 10, 550, 'Mostrar mascara', show_mask)
+
     # Crear los arrays lower y upper
     lower = np.array([b_min[0], g_min[0], r_min[0]])
     upper = np.array([b_max[0], g_max[0], r_max[0]])
@@ -72,11 +78,16 @@ while True:
         continue
 
     # Aplicar el rebanado de color (el fotograma se convierte a RGB en la funcion)
-    frame_slicing = cs.color_slicing_rgb(frame, lower, upper)
+    frame_slicing, mask = cs.color_slicing_rgb(frame, lower, upper)
 
-    # Mostrar el fotograma filtrado y los controles
+    # Mostrar la mascara o la segmentacion dependiendo del estado del checkbox
+    if show_mask[0]:
+        cvui.imshow(WINDOW_NAME, mask)
+    else:
+        cvui.imshow(WINDOW_NAME, frame_slicing)
+
+    # Mostrar los controles
     cvui.imshow(WINDOW_NAME_CONTROLS, UI)
-    cvui.imshow(WINDOW_NAME, frame_slicing)
 
     # Salir del bucle si se presiona la tecla ESC
     if cv2.waitKey(20) == 27:
