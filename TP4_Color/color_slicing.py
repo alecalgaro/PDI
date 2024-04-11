@@ -1,7 +1,7 @@
 import cv2
 import numpy as np
 
-def color_slicing_rgb(img, a, R0):
+def color_slicing_rgb_sphere(img, a, R0):
     """
     Funcion para rebanado de color (color slicing) en una imagen en el espacio de color RGB.
     Se hace el mapeo de colores en una esfera de radio R0 centrada en "a".
@@ -36,7 +36,7 @@ def color_slicing_rgb(img, a, R0):
 
     return img_sliced
 
-def color_slicing_rgb_range(img, lower, upper):
+def color_slicing_rgb(img, lower, upper):
     """
     Funcion para rebanado de color (color slicing) en una imagen en el espacio de color RGB.
     Recibe la imagen y dos arrays con los valores minimo y maximo de cada canal.
