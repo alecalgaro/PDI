@@ -23,10 +23,10 @@ PATH = "../images/"
 
 def isBlisterComplete(img):
     """
-    Funcion que recibe una imagen de un blister de pildoras y determina si un blister esta 
-    completo o incompleto e indica las posiciones de pildoras faltantes.
+    Funcion que recibe una imagen de un blister de pildoras y determina si el blister se 
+    encuentra completo o incompleto, e indica las posiciones de las pildoras faltantes.
     """
-    # Creo una mascara binaria con las pildoras (fondo blanco y pildoras negras)
+    # Creo una mascara binaria (True o False) con las pildoras (fondo blanco y pildoras negras)
     mask = img < 100
 
     # cv2.imshow("mask", mask.astype(np.uint8) * 255)
@@ -59,6 +59,8 @@ def isBlisterComplete(img):
 #* Cargo las imagenes de prueba
 img_completo = cv2.imread(PATH + "blister_completo.jpg", cv2.IMREAD_GRAYSCALE)
 img_incompleto = cv2.imread(PATH + "blister_incompleto.jpg", cv2.IMREAD_GRAYSCALE)
+img_incompleto2 = cv2.imread(PATH + "blister_incompleto2.jpg", cv2.IMREAD_GRAYSCALE)
 
 print(isBlisterComplete(img_completo))
 print(isBlisterComplete(img_incompleto))
+print(isBlisterComplete(img_incompleto2))
