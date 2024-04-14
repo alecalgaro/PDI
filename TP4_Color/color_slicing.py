@@ -34,7 +34,7 @@ def color_slicing_rgb_sphere(img, a, R0):
     # Convertir la imagen de vuelta a uint8
     img_sliced = img_sliced.astype(np.uint8)
 
-    return img_sliced
+    return img_sliced, mask
 
 def color_slicing_rgb(img, lower, upper):
     """
@@ -52,7 +52,7 @@ def color_slicing_rgb(img, lower, upper):
     # Aplicar la mascara a la imagen
     img_sliced = cv2.bitwise_and(img, img, mask=mask)
 
-    return img_sliced
+    return img_sliced, mask
 
 def color_slicing_hsv(img, lower, upper):
     """
@@ -72,4 +72,4 @@ def color_slicing_hsv(img, lower, upper):
     # Aplicar la mascara a la imagen
     img_sliced = cv2.bitwise_and(img, img, mask=mask)
 
-    return img_sliced
+    return img_sliced, mask
