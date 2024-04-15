@@ -31,17 +31,6 @@ de las regiones.
 
 PATH = '../images/'
 
-def segmentar_deforestacion(image):
-    """
-    Funcion para segmentar el area deforestada.
-    Recibe una imagen y la devuelve con el area deforestada y la mascara.
-    """
-
-    # Se ha probado utilizar la funcion para segmentar con rgb y con hsv, siendo en este caso 
-    # la mas facil de obtener un resultado optimo la segmentacion en rgb (con Rmin=71)
-    deforested_area, mask = sc.segment_color_rgb_image(image)
-    return image, mask
-
 def calcular_area():
     """
     Funcion para calcular el area de la zona delimitada, el area de la zona que tiene monte 
@@ -76,15 +65,18 @@ ksize = 25
 filtered_area = cv2.medianBlur(delimited_area, ksize)
 # cv2.imshow('Median Blur', filtered_area)
 
-#* Segmentar y resaltar en rojo el area deforestada
-_, mask_segmented = segmentar_deforestacion(filtered_area)
-# Aplicar color rojo a la zona deforestada
+#* Segmentar el area deforestada
+# Se ha probado utilizar la funcion para segmentar con rgb y con hsv, siendo en este caso 
+# la mas facil de obtener un resultado optimo la segmentacion en rgb (con Rmin=71)
+_, mask_segmented = sc.segment_color_rgb_image(filtered_area)
+
+#* Aplicar color rojo a la zona deforestada
 img[mask_segmented == 255] = [0, 0, 255]
 delimited_area[mask_segmented == 255] = [0, 0, 255]  # para ver solo el area delimitada y deforestada
-# Muestro las imagenes con la zona deforestada resaltada
+
+#* Mostrar y guardar las imagenes con la zona deforestada resaltada
 cv2.imshow("Area deforestada", img)
 cv2.imshow("Zona delimitada y deforestada", delimited_area)
-# Guardo la imagen con la zona de deforestacion segmentada
 cv2.imwrite(PATH + 'Deforestacion_segmentada.png', img)
 cv2.imwrite(PATH + 'Deforestacion_segmentada_2.png', delimited_area)
 
