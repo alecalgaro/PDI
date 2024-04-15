@@ -34,6 +34,9 @@ def color_slicing_rgb_sphere(img, a, R0):
     # Convertir la imagen de vuelta a uint8
     img_sliced = img_sliced.astype(np.uint8)
 
+    # Convertir la máscara a uint8 (para que no sea booleana y poder mostrarla)
+    mask = (mask * 255).astype(np.uint8)
+
     return img_sliced, mask
 
 def color_slicing_rgb(img, lower, upper):
