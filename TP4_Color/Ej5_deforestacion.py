@@ -46,7 +46,10 @@ img_original = cv2.imread(PATH + 'Deforestacion.png')
 
 #* Detectar automaticamente la delimitacion de la zona (se marca el area y se retorna los vertices)
 img, vertices = da.delimit_area(img_original, 150, False)
-# cv2.imshow('Imagen', img)
+cv2.imshow('Identificar zona delimitada', img)
+# cv2.imwrite(PATH + 'Deforestacion_area_delimitada.png', img)
+# cv2.waitKey(0)
+# cv2.destroyAllWindows()
 # print(vertices)
 
 #* Crear mascara a partir de la zona delimitada.
@@ -64,6 +67,7 @@ delimited_area, _ = cm.create_mask(img_original, vertices)
 ksize = 25   
 filtered_area = cv2.medianBlur(delimited_area, ksize)
 # cv2.imshow('Median Blur', filtered_area)
+# cv2.imwrite(PATH + 'Deforestacion_zona_homogenea.png', filtered_area)
 
 #* Segmentar el area deforestada
 # Se ha probado utilizar la funcion para segmentar con rgb y con hsv, siendo en este caso 
