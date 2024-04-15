@@ -31,17 +31,21 @@ def segment_color_rgb_sphere(image):
         UI[:] = (49, 52, 49)
 
         # Crear los trackbars para R, G, B y R0
-        cvui.text(UI, 50, 20, 'R')
-        cvui.trackbar(UI, 50, 50, 150, R, 0, 255)
-        cvui.text(UI, 50, 100, 'G')
-        cvui.trackbar(UI, 50, 120, 150, G, 0, 255)
-        cvui.text(UI, 50, 170, 'B')
-        cvui.trackbar(UI, 50, 190, 150, B, 0, 255)
-        cvui.text(UI, 50, 260, 'R0')
-        cvui.trackbar(UI, 50, 280, 150, R0, 0, 255)
+        cvui.text(UI, 20, 20, 'R')
+        cvui.trackbar(UI, 20, 40, 250, R, 0, 255)
+        cvui.text(UI, 20, 100, 'G')
+        cvui.trackbar(UI, 20, 120, 250, G, 0, 255)
+        cvui.text(UI, 20, 190, 'B')
+        cvui.trackbar(UI, 20, 210, 250, B, 0, 255)
+        cvui.text(UI, 20, 280, 'R0')
+        cvui.trackbar(UI, 20, 300, 250, R0, 0, 255)
 
         # Crear el checkbox para mostrar la imagen segmentada o la máscara
-        cvui.checkbox(UI, 50, 320, 'Mostrar mascara', checkbox_state)
+        cvui.checkbox(UI, 20, 380, 'Mostrar mascara', checkbox_state)
+
+        # Crear el boton para salir del bucle
+        if cvui.button(UI, 20, 410, 'Aceptar'):
+            break
 
         # Aplicar el rebanado de color en RGB
         # Definir el color central "a" y el radio R0 de la esfera de color
@@ -61,8 +65,8 @@ def segment_color_rgb_sphere(image):
         if cv2.waitKey(20) == 27:
             break
 
-    # Cerrar todas las ventanas
+    # Cerrar todas las ventanas al salir del bucle
     cv2.destroyAllWindows()
 
-    # Retornar la imagen segmentada y la máscara
+    # Retornar la imagen segmentada y la mascara
     return img_sliced_rgb, mask

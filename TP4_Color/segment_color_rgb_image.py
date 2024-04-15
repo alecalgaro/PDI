@@ -16,7 +16,7 @@ def segment_color_rgb_image(image):
     cvui.init(WINDOW_NAME_CONTROLS)
 
     # Crear una imagen en blanco para los controles
-    UI = np.zeros((580, 350, 3), np.uint8)
+    UI = np.zeros((620, 350, 3), np.uint8)
 
     # Valores iniciales para los trackbars
     r_min = [0]
@@ -48,6 +48,10 @@ def segment_color_rgb_image(image):
 
         # Crear el checkbox para mostrar la mascara o la segmentacion
         cvui.checkbox(UI, 10, 550, 'Mostrar mascara', show_mask)
+
+        # Crear el boton para salir del bucle
+        if cvui.button(UI, 10, 580, 'Aceptar'):
+            break
 
         # Crear los arrays lower y upper
         lower = np.array([b_min[0], g_min[0], r_min[0]])

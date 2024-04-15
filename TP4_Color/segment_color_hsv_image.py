@@ -15,7 +15,7 @@ def segment_color_hsv_image(image):
     cvui.init(WINDOW_NAME)
     cvui.init(WINDOW_NAME_CONTROLS)
 
-    UI = np.zeros((580, 350, 3), np.uint8)
+    UI = np.zeros((620, 350, 3), np.uint8)
 
     # Valores iniciales para los trackbars
     h_min = [0]
@@ -47,6 +47,10 @@ def segment_color_hsv_image(image):
 
         # Crear el checkbox para mostrar la mascara o la segmentacion
         cvui.checkbox(UI, 10, 550, 'Mostrar mascara', show_mask)
+
+        # Crear el boton para salir del bucle
+        if cvui.button(UI, 10, 580, 'Aceptar'):
+            break
 
         # Crear los arrays lower y upper
         lower = np.array([h_min[0], s_min[0], v_min[0]])
