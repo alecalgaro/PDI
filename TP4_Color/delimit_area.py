@@ -1,19 +1,30 @@
 import cv2
 import numpy as np
 
-def delimit_area(image, umbral=150, graph=False):
+def delimit_area(image, umbral, graph=False):
     """
     Funcion para delimitar una zona de una imagen utilizando perfiles de intensidad 
     horizontal, vertical y un umbral dado.
 
-    Se recibe una imagen y un umbral de intensidad.
-    Se devuelve la imagen con el recuadro interno dibujado.
-    Tambien se puede retornar las coordenadas del recuadro interno o externo si se necesitan.
+    Se recibe una imagen, un umbral de intensidad para encontrar la zona delimitada y un booleano
+    para indicar si se quiere dibujar el recuadro en la imagen (opcional).
+    Se devuelve la imagen con el recuadro interno dibujado y un arreglo con los vertices del mismo.
     """
     
-    # Calcular los perfiles de intensidad promedio de izquierda a derecha y de arriba a abajo
-    perfil_horizontal = np.mean(image, axis=0)
-    perfil_vertical = np.mean(image, axis=1)
+    #* Si se quiere calcular los perfiles de intensidad promedio de izquierda a derecha y de arriba a abajo
+    # Al ser el promedio de todos los px a lo largo de cada eje, es robusto a variaciones en la
+    # ubicacion de la zona a delimitar. Mientras que si se calcula por ejemplo en la mitad de la
+    # imagen, antes hay que asegurarse de que la zona a delimitar este en esa ubicacion.
+    # perfil_horizontal = np.mean(image, axis=0)
+    # perfil_vertical = np.mean(image, axis=1)
+
+    #* Si se quiere calcular los perfiles de intensidad en la mitad de la imagen
+    # En los casos donde tenemos la imagen y podemos asumir que la zona a delimitar esta en el 
+    # centro de la imagen, podemos calcular los perfiles de intensidad en la mitad de cada eje.
+    mid_height = image.shape[0] // 2    # division entera
+    mid_width = image.shape[1] // 2
+    perfil_horizontal = image[mid_height, :]
+    perfil_vertical = image[:, mid_width]
 
     # Encontrar donde el perfil de intensidad supera un cierto umbral dado
     indices_horizontal = np.where(perfil_horizontal > umbral)[0]
@@ -53,4 +64,4 @@ def delimit_area(image, umbral=150, graph=False):
 
     else:
         print("No se encontró un recuadro con el umbral dado.")
-        return None
+        return None, None
