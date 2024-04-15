@@ -69,3 +69,5 @@ def segment_color_hsv_image(image):
             break
 
     cv2.destroyAllWindows()
+
+    return img_slicing, mask
