@@ -60,7 +60,10 @@ img, vertices = da.delimit_area(img_original, 150, False)
 # cv2.imshow('Imagen', img)
 # print(vertices)
 
-#* Crear mascara a partir de los vertices de la zona delimitada
+#* Crear mascara a partir de la zona delimitada.
+#* En caso de que la funcion delimited_area no encuentre el area delimitada, por ejemplo si se
+#* utiliza un umbral muy alto, la funcion create_mask recibira vertices = None y se podra seleccionar
+#* manualmente la zona delimitada con el mouse.
 # delimited_area sera la imagen con la zona delimitada y el resto negro
 delimited_area, _ = cm.create_mask(img_original, vertices)
 # cv2.imshow('Area delimitada', delimited_area)
