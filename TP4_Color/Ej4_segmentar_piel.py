@@ -5,6 +5,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 import argparse
 import color_slicing as cs
+import segment_color_hsv_image as sc_hsv
+import segment_color_rgb_sphere as sc_sphere
 import hist_channel as hc
 
 """
@@ -19,38 +21,38 @@ s06_i13_H_LV.png
 s08_i06_H_MA.png
 """
 
-#! Responder todas las preguntas del enunciado
-#! Y armar un listado de consideraciones utiles para generar una base de datos de imagenes
-
 PATH = '../images/'
 
 # Si lo quiero usar desde consola:
 # python Ej4_segmentar_piel.py -im nombreImagen.png
 
-default_img = "s01_i08_H_CM.png"
+DEFAULT_IMAGE = "segmentar_piel.png"    # imagen collage de todas las indicadas en el enunciado
 
 ap = argparse.ArgumentParser() 
 ap.add_argument("-im", "--image", required=False, help="path de la imagen a utilizar")
 args = vars(ap.parse_args())
 
-nombre_imagen = args["image"] if args["image"] else default_img
+image_name = args["image"] if args["image"] else DEFAULT_IMAGE
 
-img = cv2.imread(PATH + nombre_imagen)
+img = cv2.imread(PATH + image_name)
+img = cv2.resize(img, (0,0), fx=0.5, fy=0.5)
 
 #* Analizar histograma de la imagen original por canales de color
 # hist_r, hist_g, hist_b, hist_h, hist_s, hist_v = hc.hist_channel(img)
 
-#* Aplicar el rebanado de color en RGB
+#* Aplicar el rebanado de color en RGB con el metodo de la esfera
 # Definir el color central "a" y el radio R0 de la esfera de color
-a = np.array([99, 122, 165])    # ajutar color de piel
-R0 = 60
-img_sliced_rgb = cs.color_slicing_rgb_sphere(img, a, R0)
+# a = np.array([99, 122, 165])    # ajutar color de piel
+# R0 = 60
+# img_sliced_rgb, _ = cs.color_slicing_rgb_sphere(img, a, R0)
+img_sliced_rgb, _ = sc_sphere.segment_color_rgb_sphere(img)
 
 #* Aplicar el rebanado de color en HSV
 # Se debe encontrar un rango de H y S que contenga los colores de piel, y el V se deja de 0 a 255
-lower = np.array([0, 100, 0])     
-upper = np.array([10, 255, 255])
-img_sliced_hsv = cs.color_slicing_hsv(img, lower, upper)
+# lower = np.array([0, 100, 0])     
+# upper = np.array([10, 255, 255])
+# img_sliced_hsv, _ = cs.color_slicing_hsv(img, lower, upper)
+img_sliced_hsv, _ = sc_hsv.segment_color_hsv_image(img)
 
 #* Mostrar las imagenes
 # Usar matplotlib sirve porque se puede pasar el mouse sobre la imagen y ver los colores [R,G,B]
