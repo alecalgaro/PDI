@@ -26,7 +26,7 @@ PATH = '../images/'
 # Si lo quiero usar desde consola:
 # python Ej4_segmentar_piel.py -im nombreImagen.png
 
-DEFAULT_IMAGE = "segmentar_piel.png"    # imagen collage de todas las indicadas en el enunciado
+DEFAULT_IMAGE = "rostros.png"    # imagen collage de todas las indicadas en el enunciado
 
 ap = argparse.ArgumentParser() 
 ap.add_argument("-im", "--image", required=False, help="path de la imagen a utilizar")

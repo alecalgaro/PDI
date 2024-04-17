@@ -4,7 +4,9 @@ import numpy as np
 def color_slicing_rgb_sphere(img, a, R0):
     """
     Funcion para rebanado de color (color slicing) en una imagen en el espacio de color RGB.
-    Se hace el mapeo de colores en una esfera de radio R0 centrada en "a".
+    Se recibe una imagen en BGR y un color central "a" en [B,G,R] y un radio R0 de la esfera
+    para hacer el mapeo de colores en una esfera de radio R0 centrada en "a".
+    
     (Formula implementada y mas informacion en pag. 31 del PDF de teoria de color).
     """
     # Convertir la imagen a float32 para evitar desbordamientos
@@ -34,7 +36,7 @@ def color_slicing_rgb_sphere(img, a, R0):
     # Convertir la imagen de vuelta a uint8
     img_sliced = img_sliced.astype(np.uint8)
 
-    # Convertir la máscara a uint8 (para que no sea booleana y poder mostrarla)
+    # Convertir la mascara a uint8 (para que no sea booleana y poder mostrarla)
     mask = (mask * 255).astype(np.uint8)
 
     return img_sliced, mask
