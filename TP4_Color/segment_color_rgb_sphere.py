@@ -48,8 +48,8 @@ def segment_color_rgb_sphere(image):
             break
 
         # Aplicar el rebanado de color en RGB
-        # Definir el color central "a" y el radio R0 de la esfera de color
-        a = np.array([R[0], G[0], B[0]])    # ajustar color de piel
+        # Definir el color central "a" (en [B, G, R]) y el radio R0 de la esfera de color
+        a = np.array([B[0], G[0], R[0]])    # ajustar color de piel
         img_sliced_rgb, mask = cs.color_slicing_rgb_sphere(image, a, R0[0])
 
         # Mostrar la imagen segmentada o la máscara, dependiendo del estado del checkbox
