@@ -31,15 +31,60 @@ de las regiones.
 
 PATH = '../images/'
 
-def calcular_area():
+def calculate_reference():
+    """
+    Funcion para calcular los px de ancho de la imagen de referencia, correspondientes a 200 m,
+    y retornar la cantidad de hectareas que representa un px en esa escala.
+    """
+    # Cargar la imagen con la medida de referencia
+    img_reference = cv2.imread(PATH + 'Deforestacion_referencia.png')
+    
+    # Calcular los px de ancho de la imagen de referencia, correspondientes a 200 m
+    px_width = img_reference.shape[1]
+    m_width = 200   # referencia en metros
+
+    # Calcular los px por metro segun la referencia
+    m_per_px = m_width/px_width
+
+    # Convertir a metros cuadrados y hectareas (1 ha = 10000 m^2)
+    m2_per_px = m_per_px ** 2
+    ha_per_px = m2_per_px / 10000
+
+    # Retornar la cantidad de hectareas que representa un px en esa escala
+    return ha_per_px
+
+def calculate_area():
     """
     Funcion para calcular el area de la zona delimitada, el area de la zona que tiene monte 
     y el area de la zona deforestada.
     """
-    #! Implementar la funcion para calcular las areas, utilizando como referencia la esquina 
-    #! inferior izquierda de la imagen original, donde hay una regla que mide 200m.
+    
+    # Calcular la cantidad de hectareas que representa un px en la escala de la imagen
+    ha_per_px = calculate_reference()
+    
+    # Cargar la imagen con la zona delimitada y deforestada
+    img = cv2.imread(PATH + 'Deforestacion_segmentada_2.png')
+    
+    # Calcular el area total de la zona delimitada
+    # img != [0, 0, 0] devuelve una matriz booleana con True en las posiciones donde el pixel 
+    # es distinto de [0, 0, 0] (negro), luego np.all(..., axis=-1) aplica la operacion all a lo largo
+    # del ultimo eje (canales de color), es decir que, si todos los canales son =! 0 es True.
+    # Y con np.count_nonzero(...) se cuenta el numero de True en la matriz booleana. 
+    total_area = np.count_nonzero(np.all(img != [0, 0, 0], axis=-1)) * ha_per_px
 
-    # return total_area, deforested_area, forest_area
+    # Calcular el area de la zona no deforestada
+    deforested_area = np.count_nonzero(np.all(img == [0, 0, 255], axis=-1)) * ha_per_px
+    
+    # Calcular el area de la zona que tiene monte
+    forest_area = total_area - deforested_area
+
+    # Redondear los valores a 2 decimales
+    total_area = round(total_area, 2)
+    deforested_area = round(deforested_area, 2)
+    forest_area = round(forest_area, 2)
+
+    return total_area, deforested_area, forest_area
+
 
 #* Cargar la imagen original
 img_original = cv2.imread(PATH + 'Deforestacion.png')
@@ -81,15 +126,16 @@ delimited_area[mask_segmented == 255] = [0, 0, 255]  # para ver solo el area del
 #* Mostrar y guardar las imagenes con la zona deforestada resaltada
 cv2.imshow("Area deforestada", img)
 cv2.imshow("Zona delimitada y deforestada", delimited_area)
-cv2.imwrite(PATH + 'Deforestacion_segmentada.png', img)
-cv2.imwrite(PATH + 'Deforestacion_segmentada_2.png', delimited_area)
+# cv2.imwrite(PATH + 'Deforestacion_segmentada.png', img)
+# cv2.imwrite(PATH + 'Deforestacion_segmentada_2.png', delimited_area)
 
 #* Calcular el area total, el area de la zona que tiene monte y el area de la zona deforestada
-# total_area, deforested_area, forest_area = calcular_area()
+total_area, deforested_area, forest_area = calculate_area()
 
-# print(f"Area total: {total_area} hectareas")
-# print(f"Area deforestada: {deforested_area} hectareas")
-# print(f"Area con monte: {forest_area} hectareas")
+print(f"Area total: {total_area} hectareas")
+print(f"Area deforestada: {deforested_area} hectareas")
+print(f"Area con monte: {forest_area} hectareas")
+print(f"Porcentaje de deforestacion: {deforested_area/total_area*100:.2f}%")
 
 cv2.waitKey(0)
 cv2.destroyAllWindows()
