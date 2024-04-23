@@ -305,8 +305,9 @@ Parámetros:
 
 La función cv.getOptimalDFTSize() devuelve el tamaño óptimo para la DFT que es mayor o igual que 
 vecsize. Este tamaño óptimo es tal que la DFT puede ser calculada de manera más eficiente. 
-Los tamaños que son potencias de 2 son más eficientes para calcular la DFT ya que internamente usa
-la transformada rápida de Fourier en esos casos.
+
+No necesariamente el tamaño optimo sera potencia de 2. Se usa en el Ej6_aplicacion_fft.py y 
+explique mas sobre el uso en ese ejercicio y los comentarios en word.
 """
 
 import cv2
