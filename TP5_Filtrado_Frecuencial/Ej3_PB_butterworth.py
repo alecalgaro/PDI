@@ -1,13 +1,3 @@
-"""
--Construya un filtro pasa-bajos ideal (circulo de altura 1 sobre una matriz de ceros, como en la
-imagen 3D en la teoria sobre filtro PB ideal). 
--Cargue una imagen y filtrela en el dominio de frecuencias, y recupere la imagen suavizada. 
--Visualice las imagenes y comparelas.
-
--Repita el ejercicio para diferentes frecuencias de corte y compruebe la aparicion del 
-fenomeno de Gibbs.
-"""
-
 import os
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
 import cv2
@@ -25,8 +15,8 @@ IMAGE = "camaleon.tif"
 
 img = cv2.imread(f"{PATH}{IMAGE}", cv2.IMREAD_GRAYSCALE)
 
-#* Crear filtro PB ideal
-D0 = [50]   # Frecuencia de corte (radio del circulo)
+#* Parametros para el filtro PB Butterworth
+D0 = [50]   # Frecuencia de corte
 n = [50]    # Orden del filtro
 
 while True:
@@ -45,7 +35,7 @@ while True:
     dft_img = cv2.dft(np.float32(img), flags=cv2.DFT_COMPLEX_OUTPUT)    # TDF
     dft_img = np.fft.fftshift(dft_img)   # Centrar la TDF
 
-    #* Crear el filtro PB ideal
+    #* Crear el filtro PB Butterworth
     mask = f_PB.filter_PB_butterworth(dft_img, D0[0], n[0])
 
     #* Aplicar el filtro
