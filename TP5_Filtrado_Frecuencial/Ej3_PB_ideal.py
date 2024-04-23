@@ -13,15 +13,15 @@ os.chdir(os.path.dirname(os.path.abspath(__file__)))
 import cv2
 import numpy as np
 import cvui
-import filter_PB_ideal as f_PB_I
+import frequency_filters_PB as f_PB
 
-WINDOW_NAME = 'Filtro PB Ideal'
+WINDOW_NAME = "Filtro PB ideal"
 
 # Inicializar cvui
 cvui.init(WINDOW_NAME)
 
 PATH = "../images/"
-IMAGE = "puente.jpg"
+IMAGE = "camaleon.tif"
 
 img = cv2.imread(f"{PATH}{IMAGE}", cv2.IMREAD_GRAYSCALE)
 
@@ -33,7 +33,8 @@ while True:
     frame = np.zeros((200, 500), np.uint8)
 
     #* Crear un trackbar en la interfaz de usuario
-    cvui.trackbar(frame, 50, 50, 400, D0, 1, 200)
+    cvui.text(frame, 50, 50, 'Frecuencia de corte D0:')
+    cvui.trackbar(frame, 50, 80, 400, D0, 1, 200)
     D0[0] = int(round(D0[0]))  # Redondear el valor de D0
 
     #* TDF
@@ -41,7 +42,7 @@ while True:
     dft_img = np.fft.fftshift(dft_img)   # Centrar la TDF
 
     #* Crear el filtro PB ideal
-    mask = f_PB_I.create_filter_PB_ideal(dft_img, D0[0])
+    mask = f_PB.filter_PB_ideal(dft_img, D0[0])
 
     #* Aplicar el filtro
     dft_img *= mask

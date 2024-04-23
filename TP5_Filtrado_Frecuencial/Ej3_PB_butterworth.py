@@ -13,7 +13,7 @@ os.chdir(os.path.dirname(os.path.abspath(__file__)))
 import cv2
 import numpy as np
 import cvui
-import filter_PB_butterworth as f_PB_b
+import frequency_filters_PB as f_PB
 
 WINDOW_NAME = 'Filtro PB Butterworth'
 
@@ -46,7 +46,7 @@ while True:
     dft_img = np.fft.fftshift(dft_img)   # Centrar la TDF
 
     #* Crear el filtro PB ideal
-    mask = f_PB_b.create_filter_PB_butterworth(dft_img, D0[0], n[0])
+    mask = f_PB.filter_PB_butterworth(dft_img, D0[0], n[0])
 
     #* Aplicar el filtro
     dft_img *= mask
