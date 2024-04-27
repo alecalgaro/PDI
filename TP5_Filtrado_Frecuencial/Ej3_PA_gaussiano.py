@@ -5,7 +5,7 @@ import numpy as np
 import cvui
 import frequency_filters_PA as f_PA
 
-WINDOW_NAME = 'Filtro PA Butterworth'
+WINDOW_NAME = 'Filtro PA Gaussiano'
 
 # Inicializar cvui
 cvui.init(WINDOW_NAME)
@@ -15,28 +15,24 @@ IMAGE = "camaleon.tif"
 
 img = cv2.imread(f"{PATH}{IMAGE}", cv2.IMREAD_GRAYSCALE)
 
-#* Parametros para el filtro PA Butterworth
-D0 = [1]   # Frecuencia de corte
-n = [50]    # Orden del filtro
+#* Parametros para el filtro PA Gaussiano
+sigma = [10]   # Desviacion estandar
 
 while True:
     #* Crear una imagen en blanco para la interfaz de usuario
     frame = np.zeros((200, 500), np.uint8)
 
     #* Crear un trackbar en la interfaz de usuario
-    cvui.text(frame, 50, 20, 'Frecuencia de corte (D0):')
-    cvui.trackbar(frame, 50, 40, 400, D0, 1, 200)
-    cvui.text(frame, 50, 120, 'Orden del filtro (n):')
-    cvui.trackbar(frame, 50, 140, 400, n, 1, 100)
-    D0[0] = int(round(D0[0]))  # Redondear el valor de D0
-    n[0] = int(round(n[0]))  # Redondear el valor de "n"
+    cvui.text(frame, 50, 20, 'Sigma:')
+    cvui.trackbar(frame, 50, 40, 400, sigma, 1, 200)
+    sigma[0] = int(round(sigma[0]))  # Redondear el valor de D0
 
     #* TDF
     dft_img = cv2.dft(np.float32(img), flags=cv2.DFT_COMPLEX_OUTPUT)    # TDF
     dft_img = np.fft.fftshift(dft_img)   # Centrar la TDF
 
-    #* Crear el filtro PA Butterworth
-    mask = f_PA.filter_PA_butterworth(dft_img, D0[0], n[0])
+    #* Crear el filtro PA Gaussiano
+    mask = f_PA.filter_PA_gaussiano_v2(dft_img, sigma[0])
 
     #* Aplicar el filtro
     dft_img *= mask

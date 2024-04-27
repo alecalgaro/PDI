@@ -36,7 +36,7 @@ while True:
     dft_img = np.fft.fftshift(dft_img)   # Centrar la TDF
 
     #* Crear el filtro PB Butterworth
-    mask = f_PB.filter_PB_butterworth(dft_img, D0[0], n[0])
+    mask = f_PB.filter_PB_butterworth_v2(dft_img, D0[0], n[0])
 
     #* Aplicar el filtro
     dft_img *= mask

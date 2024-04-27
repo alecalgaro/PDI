@@ -41,7 +41,7 @@ while True:
     dft_img = np.fft.fftshift(dft_img)   # Centrar la TDF
 
     #* Crear el filtro PA ideal
-    mask = f_PA.filter_PA_ideal(dft_img, D0[0])
+    mask = f_PA.filter_PA_ideal_v2(dft_img, D0[0])
 
     #* Aplicar el filtro
     dft_img *= mask
