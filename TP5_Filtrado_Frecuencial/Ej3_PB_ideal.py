@@ -41,14 +41,26 @@ while True:
     dft_img = cv2.dft(np.float32(img), flags=cv2.DFT_COMPLEX_OUTPUT)    # TDF
     dft_img = np.fft.fftshift(dft_img)   # Centrar la TDF
 
+    #* Mostrar TDF de la imagen antes de filtrar
+    dft_magnitude = cv2.magnitude(dft_img[:,:,0], dft_img[:,:,1])  # Magnitud
+    dft_magnitude = cv2.log(dft_magnitude + 1)
+    dft_magnitude = cv2.normalize(dft_magnitude, None, 0, 255, cv2.NORM_MINMAX, cv2.CV_8U)  # Normalizar
+    cv2.imshow('TDF', dft_magnitude)
+    
     #* Crear el filtro PB ideal
     mask = f_PB.filter_PB_ideal(dft_img, D0[0])
 
     #* Aplicar el filtro
-    dft_img *= mask
+    dft_img_filter = dft_img * mask
+
+    #* Mostrar TDF de la imagen filtrada
+    dft_magnitude = cv2.magnitude(dft_img_filter[:,:,0], dft_img_filter[:,:,1])  # Magnitud
+    dft_magnitude = cv2.log(dft_magnitude + 1)
+    dft_magnitude = cv2.normalize(dft_magnitude, None, 0, 255, cv2.NORM_MINMAX, cv2.CV_8U)  # Normalizar
+    cv2.imshow('TDF Filtrada', dft_magnitude)
 
     #* Realizar la TDF inversa
-    dft_ishift = np.fft.ifftshift(dft_img)  # Descentrar
+    dft_ishift = np.fft.ifftshift(dft_img_filter)  # Descentrar
     img_back = cv2.idft(dft_ishift, flags=cv2.DFT_SCALE | cv2.DFT_COMPLEX_OUTPUT)  # TDF inversa
     img_back = cv2.magnitude(img_back[:,:,0], img_back[:,:,1])  # Magnitud
     img_back = cv2.normalize(img_back, None, 0, 255, cv2.NORM_MINMAX, cv2.CV_8U)  # Normalizar

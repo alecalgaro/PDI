@@ -39,11 +39,21 @@ while True:
     dft_img = cv2.dft(np.float32(img), flags=cv2.DFT_COMPLEX_OUTPUT)    # TDF
     dft_img = np.fft.fftshift(dft_img)   # Centrar la TDF
 
+    #* Mostrar TDF de la imagen antes de filtrar
+    dft_magnitude = cv2.magnitude(dft_img[:,:,0], dft_img[:,:,1])  # Magnitud
+    dft_magnitude = cv2.normalize(dft_magnitude, None, 0, 255, cv2.NORM_MINMAX, cv2.CV_8U)  # Normalizar
+    cv2.imshow('TDF', dft_magnitude)
+
     #* Crear el filtro de enfasis en alta frecuencia
     mask = f_eaf.filter_enfasis_alta_frec(dft_img, a[0], b[0], sigma[0])
 
     #* Aplicar el filtro
     dft_img *= mask
+
+    #* Mostrar TDF de la imagen filtrada
+    dft_magnitude = cv2.magnitude(dft_img[:,:,0], dft_img[:,:,1])  # Magnitud
+    dft_magnitude = cv2.normalize(dft_magnitude, None, 0, 255, cv2.NORM_MINMAX, cv2.CV_8U)  # Normalizar
+    cv2.imshow('TDF Filtrada', dft_magnitude)
 
     #* Realizar la TDF inversa
     dft_ishift = np.fft.ifftshift(dft_img)  # Descentrar
