@@ -4,9 +4,10 @@ colores complementarios a los de la original. Utilice las componentes del modelo
 HSV y la imagen "rosas.jpg".
 
 Es analogo a obtener el negativo en imagenes en escala de grises.
-En color, el complementario de un color es el opuesto en el circulo de colores.
-En la teoria anote que si fuera en HSI, al H tomamos 360° menos el H del px, y para la I 
-hacemos 1 menos la I del px, y la saturacion la dejamos igual. 
+En color, el complementario de un color es el opuesto en el circulo de colores,
+mas el negativo de la intensidad.
+En la teoria anote que si fuera en HSI, al H tomamos 360° menos el H del px, y 
+para la I hacemos 1 menos la I del px, y la saturacion la dejamos igual. 
 """
 
 import os
