@@ -30,17 +30,21 @@ def prewitt(img):
 
     return img
 
-def sobel(img,dtype,ksize):
+# En el Ej1_Sobel lo hice completo pudiendo elegir bordes horizontales, vertical, diagonales o
+# en todas las direcciones.
+def sobel(img,dtype,dx,dy,ksize):
     """
     Funcion que implementa el detector de bordes de Sobel.
+    En este caso calcula los bordes en la dirección "x", en la dirección "y",  
+    y en ambas direcciones (bordes diagonales).
     """
     # Bordes detectados en direccion x
-    img_sb_x = cv2.Sobel(img,dtype,1,0,ksize)
+    img_sb_x = cv2.Sobel(img,dtype,dx,dy,ksize)
     # Bordes detectados en direccion y
     img_sb_y = cv2.Sobel(img,dtype,0,1,ksize)
 
     # Se suman los bordes detectados por los filtros de Sobel en x e y
-    img_sb = img_sb_x + img_sb_y 
+    img_sb = cv2.add(img_sb_x, img_sb_y) 
     
     # Si ksize es diferente de -1, se suman los bordes detectados por el filtro de Sobel en x e y
     # simultaneamente, para obtener bordes diagonales.
@@ -49,8 +53,9 @@ def sobel(img,dtype,ksize):
     # por separado es suficiente y no necesitamos hacer una convolución adicional en ambas 
     # direcciones simultáneamente.
     if ksize != -1:
-        img_sb += cv2.Sobel(img,dtype,1,1,ksize,scale=2)
-                            
+        img_sb_diag = cv2.Sobel(img,dtype,1,1,ksize,scale=2)
+        img_sb = cv2.add(img_sb, img_sb_diag)    
+
     return img_sb
 
 def laplacian(img,dtype,ksize):
