@@ -28,6 +28,9 @@ def prewitt(img):
     img = np.sqrt(img_x**2 + img_y**2 + img_d1**2 + img_d2**2)
     img = (img > 0.1*np.max(img))*255
 
+    # Convertir la imagen a 8 bits antes de retornarla
+    img = cv2.normalize(img, None, 255,0, cv2.NORM_MINMAX, cv2.CV_8U)
+
     return img
 
 # En el Ej1_Sobel lo hice completo pudiendo elegir bordes horizontales, vertical, diagonales o

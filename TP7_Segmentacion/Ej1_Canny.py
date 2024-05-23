@@ -12,8 +12,8 @@ import numpy as np
 
 PATH = "../images/"
 
-img = cv2.imread(PATH+'building.jpg',0)
-img = cv2.cvtColor(img, cv2.COLOR_GRAY2BGR)
+img = cv2.imread(PATH+'snowman.png')
+img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 
 WINDOW_NAME = 'Canny Edge Detector'
 CONTROL_WINDOW = 'Settings'
