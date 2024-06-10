@@ -43,6 +43,40 @@ def get_dft(imagen, optimal=True, normalizar=True, imin=0, imax=255):
     return mag_img, phi_img, comp_img_sh
 
 
+def FFT_stuff(img):
+    fshift = np.fft.fftshift(np.fft.fft2(img))
+    mag_img = np.abs(fshift)
+    log_mag_img = 20*np.log(mag_img+0.000000001)
+    img_new = np.abs(np.fft.ifft2(np.fft.ifftshift(fshift)))
+    img_new = cv2.normalize(img_new,None,0,255,cv2.NORM_MINMAX)
+    return mag_img.astype("uint8"),log_mag_img,img_new
+
+
+def get_pad_width(shape): #esto es por que si la imagen no es cuadrada no anda bien
+    a = b = c = d = 0
+    xx,yy = shape[0],shape[1]
+    if (xx>yy):
+        if (xx%2 == 0):
+            b = 1
+            xx = xx + 1
+        dif = xx - yy
+        c = d = int(dif/2)
+        if (dif%2 != 0):
+            d = d + 1
+    else:
+        if (yy > xx):
+            if (yy%2 == 0):
+                d = 1
+                yy = yy + 1
+            dif = yy - xx
+            a = b = int(dif/2)
+            if (dif%2 != 0):
+                b = b + 1
+        else:
+            a = c = 1
+    return ((a,b),(c,d))
+
+
 def get_idft(comp_img_sh, normalizar=True, imin=0, imax=255):
     """TODO: Docstring for get_idft.
 
@@ -93,6 +127,7 @@ def apply_filter(img, fil_type, params, is_lowpass, is_high_boost=False):
     fsp = np.zeros_like(imgsp)
     fsp[:,:,0]=fmag
     if is_high_boost:
+        fsp[:,:,0]*=params["B"]
         fsp[:,:,0]+=params["A"]-1
     imgsp = cv2.mulSpectrums(imgsp, fsp, cv2.DFT_ROWS)
     return get_idft(imgsp)
@@ -168,3 +203,56 @@ def gaussian_filter(img_shape, params, is_lowpass):
     return mag
 
 
+def homomorphic_filter(image, D, n=2, high_h=100, low_h=30):
+    """TODO: Docstring for homomorphic_filter.
+
+    Parameters:
+        image: TODO
+        D: TODO
+        n: TODO
+        high_h: TODO
+        low_h: TODO
+    Returns:
+        TODO
+
+    """
+    #-------------------------------------------------------------------#
+    # Homomorphic filtering
+    #
+    # image -> ln -> FFT -> H(Butterw filter) -> IFFT -> exp -> result
+    #-------------------------------------------------------------------#
+
+    # log
+    img_log = np.log(image + 0.000001)
+
+    # fft and shift of img_log
+    img_fft = cv2.dft(np.float32(img_log)/255.0,flags=cv2.DFT_COMPLEX_OUTPUT)
+    img_sfft = np.fft.fftshift(img_fft)
+
+    # generate H(u, v)
+    du = np.zeros(img_sfft.shape, dtype = np.float32)
+    uu,vv,_ = img_sfft.shape
+    for u in range(uu):
+        for v in range(vv):
+            du[u,v]=np.sqrt((u-uu/2.0)*(u-uu/2.0)+(v-vv/2.0)*(v-vv/2.0))
+
+    du2 = cv2.multiply(du,du) / (D*D)
+    re = np.exp(- n * du2)
+    H = (high_h - low_h) * (1 - re) + low_h
+
+    # apply H
+    img_fltrd = cv2.mulSpectrums(img_sfft, np.float32(H), 0)
+
+    # de-shift and ifft
+    img_flog = np.fft.ifftshift(img_fltrd)
+    img_flog = cv2.idft(img_flog)
+
+    # normalization
+    img_flog = cv2.magnitude(img_flog[:, :, 0], img_flog[:, :, 1])
+    cv2.normalize(img_flog, img_flog, 0, 1, cv2.NORM_MINMAX)
+
+    # exp and normalization
+    img_final = np.exp(img_flog)
+    cv2.normalize(img_final, img_final,0, 255, cv2.NORM_MINMAX)
+
+    return img_final.astype("uint8")
